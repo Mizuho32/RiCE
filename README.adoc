@@ -1,5 +1,8 @@
 = IPAdress Updater
 
+Update DDNS.
+If you are using OpenWRT, you can get the global IP address from it.
+
 == Install
 
 [source, ruby]
