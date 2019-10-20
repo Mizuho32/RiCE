@@ -1,0 +1,70 @@
+= IPAdress Updater
+
+== Install
+
+[source, ruby]
+----
+$ bundle install --path vendor/bundle
+----
+
+== Config
+
+.config.yaml
+[source, yaml]
+----
+:mode: :openwrt         # how to get global IP. :openwrt, :parse_html or literal value like "0.0.0.0" for debug
+:sources:               # get html from...
+  - http://global.ip1 
+  - http://global.ip2 
+  - http://global.ip3 
+:servers:               # check internet connection by
+  - google.com
+  - bing.com
+  - yahoo.co.jp
+:limit: 3               # trial limit
+:gateway: "192.168.1.1" # gateway
+:token: ""              # openwrt luci json rpc token. 32 characters
+:logout:                # log to output
+  - :STDOUT             # stdio
+  - "getip.log"         # file
+:check_interval: 60     # check every 60sec
+:write_interval: 60*5   # log eveery 5minutes
+:production: true       # notify IP change by LINE and mail
+:ip_before_file: "IP_latest"  # store IP to file
+:set_ip: "Set_IP.sh"          # give IP and update DDNS script
+:line:
+  :secret: ""           # line bot secret
+  :token: ""            # line bot token
+  :to: ""               # line account id to notify
+:gmail:
+  :user: ''             # user@gmail.com
+  :pass: ''             # token for gmail application
+  :to:   ''             # email address to notify
+----
+
+.systemd
+[sources, bash]
+----
+[Unit]
+Description=IPAddress Updater Daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/sh /path/to/IP_Updater.sh -d
+Restart=on-failure
+#User=pi
+#Group=pi
+
+[Install]
+WantedBy=multi-user.target
+----
+
+== OpenWRT Luci JSON RPC token
+
+Run
+[source, bash]
+----
+bundle exec ruby ./getIP.rb config.yaml rpc auth login '["root", "pass"]'
+----
+or use `curl`. See official document.
