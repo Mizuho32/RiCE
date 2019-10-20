@@ -1,5 +1,9 @@
 .*.swp
 .*.swo
+/getip.log
+/*.yaml
+/IP_latest
+
 
 # Created by https://www.gitignore.io/api/ruby
 # Edit at https://www.gitignore.io/?templates=ruby
